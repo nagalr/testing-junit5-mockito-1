@@ -8,8 +8,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by ronnen on 16-Feb-2021
@@ -34,5 +36,23 @@ class SpecialitySDJpaServiceTest {
         specialitySDJpaService.deleteById(1L);
 
         verify(specialtyRepository,never()).deleteById(2L);
+    }
+
+    @Test
+    void findByIdTest() {
+        Speciality returning = new Speciality();
+
+        // tell the repository Mock what to do on 'findById' call
+        // the repository Mock is making to call the
+        when(specialtyRepository.findById(1L)).thenReturn(Optional.of(returning));
+
+        // do what we defined
+        returning = specialitySDJpaService.findById(1L);
+
+        // checking the return value
+        assertThat(returning).isNotNull();
+
+        // verify that 'findById' returned the speciality object
+        verify(specialtyRepository, times(1)).findById(1L);
     }
 }
