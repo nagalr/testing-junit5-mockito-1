@@ -92,4 +92,20 @@ class SpecialitySDJpaServiceTest {
         assertThat(specialities).isNotNull();
 
     }
+
+    @Test
+    void saveTest() {
+
+        // define a Speciality object for testing
+        Speciality speciality = new Speciality();
+
+        // define what the service should do when called on 'save'
+        when(specialitySDJpaService.save(any(Speciality.class))).thenReturn(speciality);
+
+        // execute the 'save' call
+        speciality = specialitySDJpaService.save(new Speciality());
+
+        // verify that 'specialityRepository' was called once on any Speciality object
+        verify(specialtyRepository, times(1)).save(any(Speciality.class));
+    }
 }
