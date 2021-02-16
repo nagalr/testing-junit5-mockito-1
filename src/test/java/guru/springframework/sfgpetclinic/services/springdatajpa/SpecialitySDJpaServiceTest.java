@@ -96,16 +96,19 @@ class SpecialitySDJpaServiceTest {
     @Test
     void saveTest() {
 
-        // define a Speciality object for testing
-        Speciality speciality = new Speciality();
+        // define a Speciality pointer for testing
+        Speciality speciality;
 
         // define what the service should do when called on 'save'
-        when(specialitySDJpaService.save(any(Speciality.class))).thenReturn(speciality);
+        when(specialitySDJpaService.save(any(Speciality.class))).thenReturn(new Speciality());
 
         // execute the 'save' call
         speciality = specialitySDJpaService.save(new Speciality());
 
         // verify that 'specialityRepository' was called once on any Speciality object
         verify(specialtyRepository, times(1)).save(any(Speciality.class));
+
+        // verify that 'specialities' is not null
+        assertThat(speciality).isNotNull();
     }
 }
