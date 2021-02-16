@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 /**
@@ -48,7 +49,7 @@ class SpecialitySDJpaServiceTest {
     @Test
     void deleteByIdTest() {
         specialitySDJpaService.deleteById(1L);
-        verify(specialtyRepository,times(1)).deleteById(1L);
+        verify(specialtyRepository, times(1)).deleteById(1L);
     }
 
     @Test
@@ -69,6 +70,22 @@ class SpecialitySDJpaServiceTest {
         assertThat(returning).isNotNull();
 
         // verify that 'findById' returned the speciality object
+        verify(specialtyRepository, times(1)).findById(1L);
+    }
+
+    @Test
+    void findByIdBDDTest() {
+
+        Speciality returning = new Speciality();
+
+        // given
+        given(specialtyRepository.findById(1L)).willReturn(Optional.of(returning));
+
+        // when
+        returning = specialitySDJpaService.findById(1L);
+
+        // then
+        assertThat(returning).isNotNull();
         verify(specialtyRepository, times(1)).findById(1L);
     }
 
